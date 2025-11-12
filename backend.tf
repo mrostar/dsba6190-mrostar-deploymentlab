@@ -14,4 +14,3 @@ provider "azurerm" {
   subscription_id = "b92ea061-7db2-40ee-ad4a-cee871832b64"
 }
 
-#update example

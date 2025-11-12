@@ -1,4 +1,3 @@
-#example of a change
 // Tags
 locals {
   tags = {
