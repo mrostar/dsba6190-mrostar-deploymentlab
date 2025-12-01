@@ -9,18 +9,20 @@ locals {
 
 // Existing Resources
 
-// Subscription ID
+/// Subscription ID
 
 # data "azurerm_subscription" "current" {
 # }
 
 // Random Suffix Generator
+
 resource "random_integer" "deployment_id_suffix" {
   min = 100
   max = 999
 }
 
 // Resource Group
+
 resource "azurerm_resource_group" "rg" {
   name     = "rg-${var.class_name}-${var.student_name}-${var.environment}-${var.location}-${random_integer.deployment_id_suffix.result}"
   location = var.location
@@ -29,6 +31,7 @@ resource "azurerm_resource_group" "rg" {
 }
 
 // Storage Account
+
 resource "azurerm_storage_account" "storage" {
   name                     = "sto${var.class_name}${var.student_name}${var.environment}${random_integer.deployment_id_suffix.result}"
   resource_group_name      = azurerm_resource_group.rg.name
@@ -46,15 +49,17 @@ resource "azurerm_storage_account" "storage" {
   tags = local.tags
 }
 
-// Virtual Network
+// creating virtual network
+
 resource "azurerm_virtual_network" "virtualnet" {
-  name                = "virtualnet-${var.class_name}-${var.student_name}-${var.environment}-${var.location}-${random_integer.deployment_id_suffix.result}"
+  name                = "mrostar-virtualnet"
   address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 }
 
-// subnet
+// creating subnet
+
 resource "azurerm_subnet" "snet" {
   name                 = "snetmrostar"
   resource_group_name  = azurerm_resource_group.rg.name
@@ -64,8 +69,9 @@ resource "azurerm_subnet" "snet" {
 }
 
 // SQL Server
+
 resource "azurerm_mssql_server" "sql" {
-  name                         = "sql-${var.class_name}${var.student_name}${var.environment}${random_integer.deployment_id_suffix.result}"
+  name                         = "mrostar-server"
   resource_group_name          = azurerm_resource_group.rg.name
   location                     = azurerm_resource_group.rg.location
   version                      = "12.0"
@@ -73,9 +79,10 @@ resource "azurerm_mssql_server" "sql" {
   administrator_login_password = "4-v3ry-53cr37-p455w0rd"
 }
 
-// SQL DB
+// SQL Database
+
 resource "azurerm_mssql_database" "db" {
-  name         = "db-${var.class_name}${var.student_name}${var.environment}${random_integer.deployment_id_suffix.result}"
+  name         = "mrostar-db"
   server_id    = azurerm_mssql_server.sql.id
   collation    = "SQL_Latin1_General_CP1_CI_AS"
   license_type = "LicenseIncluded"
@@ -93,6 +100,7 @@ resource "azurerm_mssql_database" "db" {
 }
 
 // virtual network rule
+
 resource "azurerm_mssql_virtual_network_rule" "virtualnetwork-rule" {
   name      = "mrostar_rule"
   server_id = azurerm_mssql_server.sql.id
