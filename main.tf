@@ -99,6 +99,7 @@ resource "azurerm_mssql_database" "db" {
   }
 }
 
+
 // virtual network rule
 
 resource "azurerm_mssql_virtual_network_rule" "virtualnetwork-rule" {
