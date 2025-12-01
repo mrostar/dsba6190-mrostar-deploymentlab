@@ -71,7 +71,7 @@ resource "azurerm_subnet" "snet" {
 // SQL Server
 
 resource "azurerm_mssql_server" "sql" {
-  name                         = "mrostar-server"
+  name                         = "mrostar-sqlserver"
   resource_group_name          = azurerm_resource_group.rg.name
   location                     = azurerm_resource_group.rg.location
   version                      = "12.0"
