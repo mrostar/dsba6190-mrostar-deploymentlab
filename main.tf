@@ -40,15 +40,13 @@ resource "azurerm_storage_account" "storage" {
   account_tier             = "Standard"
   account_replication_type = "LRS"
 
-    network_rules {
+  network_rules {
     default_action             = "Deny"
     ip_rules                   = ["100.0.0.1"]
     virtual_network_subnet_ids = [azurerm_subnet.snet.id]
   }
 
-
   tags = local.tags
-
   
   is_hns_enabled = true
 
